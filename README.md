@@ -1,16 +1,17 @@
 # php-state-machine
 PHP implementation of (Non) Deterministic Automaton.
+Work on this project was done 2011.
 
 ## Deterministic Finite Automaton
 
 An important area of the theoretical computer science deals with finite automata and languages. We use a finite automaton to detect words of regular languages. The types of grammars that create a language are defined in the CHOMSKY-hierachy (Noam Chomsky). The table below shows the CHOMSKY-hierachy:
-
-no.	title
-0	recursively enumerable
-1	context-sensitive
-2	context-free
-3	regular
-To represent a regular grammar (type 3) you can use for instance a finite automaton. Here we are using a DFA (deterministic finite automaton) to display a regular grammar. A DFA consists of states and the automaton can reach a new state with a edge to another state (states are a kind of nodes or vertexes). Every state has a successor state for all tokens of the input alphabet. This input alphabet is specified:
+```
+0	- recursively enumerable
+1	- context-sensitive
+2	- context-free
+3	- regular
+```
+To represent a regular grammar (type 3) you can use for instance a finite automaton. Here we are using a DFA (deterministic finite automaton) to display a regular grammar. A DFA consists of states and the automaton can reach a new state with an edge to another state (states are a kind of nodes or vertexes). Every state has a successor state for all tokens of the input alphabet. This input alphabet is specified:
 
 for this example:
 ```
@@ -52,17 +53,19 @@ $dfa->setStartingState('z0');
 
 $result = $dfa->run('accbbababcababa', true);
 ```
+
 ## Non Deterministic Automaton
 
-To demonstrate an easy example, I use a NFA, that accepts a word, which includes the substring ‘abc’. I used this example also in a previous article (about DFAs). You can compare the following automaton with the DFA that accepts the same words and you would come to the conclusion, that the NFA is easier to build. Thats the truth, but on the other hand, in most (not all) cases the NFA needs more time to execute all simultanous calculations for a token from the alphabet.
+To demonstrate an easy example, I use a NFA, that accepts a word, which includes the substring ‘abc’. I also used this example above (about DFAs). You can compare the following automaton with the DFA that accepts the same words and you would come to the conclusion, that the NFA is easier to build. Thats ist true, but on the other hand, in most (not all) cases the NFA needs more time to execute all simultanous calculations for a token from the alphabet.
 
 An automaton needs (for formal description) an input alphabet. For that example, the alphabet is specified as:
 
 for this example:
+```php
 Σ = {a,b,c}
+```
 
-
-A few sentences ago i mentioned, that the NFA needs more time to execute all simultanous calculations. But why? Well, let us choose the input word ‘ccababca’. (For further demonstrations I will use s1, s2, s3 and s4 as names for the states [blue circle] from the left to the right) We start the simulation with the first two tokens ‘cc’. The NFA remains in s1 (state 1). After that the NFA simulates for the token ‘a’. In s1 with input ‘a’ the NFA can go to s2 and can also stay in s1 (self-loop). Here we have the main problem! The NFA simulates all possible calculations and that is the problem, that the NFA has. After token ‘a’ comes token ‘b’ and for that token, the NFA simulates s1 and s3.
+A few sentences ago I mentioned, that the NFA needs more time to execute all simultanous calculations. But why? Well, let us choose the input word ‘ccababca’. (For further demonstrations I will use s1, s2, s3 and s4 as names for the states [blue circle] from the left to the right) We start the simulation with the first two tokens ‘cc’. The NFA remains in s1 (state 1). After that the NFA simulates for the token ‘a’. In s1 with input ‘a’ the NFA can go to s2 and can also stay in s1 (self-loop). Here we have the main problem! The NFA simulates all possible calculations and that is the problem, that the NFA has. After token ‘a’ comes token ‘b’ and for that token, the NFA simulates s1 and s3.
 
 The PHP implementation of the NFA works with the transition table of every state. Outward from the starting state(s), the algorithm is looking for a transition from the current state to another – the successor state. After the input word was read, the NFA checks whether it is currently in a final state or not. The formalization of a final state is defined with a thicker border line (as you can see in the sketch above the text). In the PHP implementation it is just a boolean value. You can also choose more than one starting states with:
 
